@@ -1,0 +1,36 @@
+# Ambiente virtual Python
+venv/
+.env/
+.venv/
+
+# Arquivos temporários e caches do Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Jupyter Notebooks checkpoints
+.ipynb_checkpoints
+
+# VSCode
+.vscode/
+
+# Arquivos de log
+*.log
+
+# Dados sensíveis ou arquivos grandes
+*.sqlite3
+*.csv
+*.json
+*.tar.gz
+
+# Ignore arquivos de sistema
+.DS_Store
+Thumbs.db
+
+# Arquivos de testes
+.coverage
+.tox/
+pytest_cache/
+
+# Padrão para ignorar pastas vazias (sem afetar .gitkeep)
+!*/.gitkeep
