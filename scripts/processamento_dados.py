@@ -3,73 +3,78 @@ import csv
 
 class Dados:
 
-
-   def __init__(self, path, tipo_dados):
-      self.path = path
-      self.tipo_dados = tipo_dados
-      self.dados = self.leitura_dados()
+   def __init__(self, dados, origem='memoria'):
+      self.path = origem
+      self.dados = dados
+      self.nome_colunas = self.__get_columns()
+      self.qtd_linhas = self.__size_data()
    
-   def leitura_json(self):
-      dados_json = []
-      with open(self.path, 'r') as file:
-         dados_json = json.load(file)
-      return dados_json
+   @staticmethod
+   def __leitura_json(path):
+      with open(path, 'r') as file:
+         return json.load(file)
 
-   def leitura_csv(self):
+   @staticmethod
+   def __leitura_csv(path):
       dados_csv = []
-      with open(self.path, 'r') as file:
+      with open(path, 'r') as file:
          spamreader = csv.DictReader(file, delimiter=',')
          for row in spamreader:
             dados_csv.append(row)
       return dados_csv
 
-   def leitura_dados(self):
-      dados = []
-      if(self.tipo_dados.lower() == 'csv'):
-         dados = self.leitura_csv()
-         return dados
-      elif (self.tipo_dados.lower() == 'json'):
-         dados = self.leitura_json()
-         return dados
+   @classmethod
+   def from_file(cls, path, tipo_dados):
+      if tipo_dados.lower() == 'csv':
+         dados = cls.__leitura_csv(path)
+      elif tipo_dados.lower() == 'json':
+         dados = cls.__leitura_json(path)
       else:
-         return print('Tipo de dados inválido!')
+         raise ValueError('Tipo de dados inválido para leitura de arquivo.')
+      return cls(dados, origem=path)
       
-   def get_columns(dados):
-      return list(dados[0].keys())
+   @classmethod
+   def from_memory(cls, dados):
+      return cls(dados)
+   
+   def __get_columns(self):
+      return list(self.dados[-1].keys())
+   
+   def __size_data(self):
+      return len(self.dados)
 
-   def rename_columns(dados, key_mapping):
+   def rename_columns(self, key_mapping):
       new_dados = []
 
-      for old_dict in dados:
+      for old_dict in self.dados:
          dict_temp = {}
          for old_key, value in old_dict.items():
             dict_temp[key_mapping[old_key]] = value
          new_dados.append(dict_temp)
          
-      return new_dados
+      self.dados = new_dados
+      self.nome_colunas = self.__get_columns()
 
-   def size_data(dados):
-      return len(dados)
+   @classmethod
+   def join(cls, dadosA, dadosB):
+      dados_combinados = dadosA.dados + dadosB.dados
+      return cls.from_memory(dados_combinados)
 
-   def join(dadosA, dadosB):
-      combined_list = []
-      combined_list.extend(dadosA)
-      combined_list.extend(dadosB)
+   def __transformacao_dados_tabela(self):
+      dados_combinados_tabela = [self.nome_colunas]
 
-      return combined_list
-
-   def transformacao_dados_tabela(dados, nomes_colunas):
-      dados_combinados_tabela = [nomes_colunas]
-
-      for row in dados:
+      for row in self.dados:
          linha = []
-         for coluna in nomes_colunas:
-            linha.append(row.get(coluna, 'Indisponivel'))
+         for coluna in self.nome_colunas:
+            linha.append(row.get(coluna, 'Indisponível'))
          dados_combinados_tabela.append(linha)
 
       return dados_combinados_tabela
 
-   def salvando_dados(path, dados):
+   def salvando_dados(self, path):
+
+      dados_combinados_tabela = self.__transformacao_dados_tabela()
+
       with open(path, 'w') as file:
          writer = csv.writer(file)
-         writer.writerows(dados)
+         writer.writerows(dados_combinados_tabela)
