@@ -43,23 +43,29 @@ Projeto em Python com foco em manipulação de dados utilizando orientação a o
    ```bash
    git clone https://github.com/MatheusFreitas54/pipeline_data.git
    cd pipeline_data
+   ```
    
 2. **(Opcional) Crie um ambiente virtual**
 
+   ```bash
    python -m venv venv
    source venv/bin/activate  # Linux/macOS
    venv\Scripts\activate     # Windows
+   ```
 
 3. **Instale as dependências**
 
+   ```bash
    pip install requests==2.28.2
    pip install pandas==2.0.0
    pip install notebook==7.0.3
    pip install pytest
-
+   ```
    `ou`
 
+   ```bash
    pip install -r requirements.txt
+   ```
 
 4. **Execute o exemplo**
 
@@ -89,5 +95,3 @@ Projeto em Python com foco em manipulação de dados utilizando orientação a o
 ## Autor
 
 Desenvolvido por Matheus Freitas ™
-
-```
