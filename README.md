@@ -69,7 +69,9 @@ Projeto em Python com foco em manipulação de dados utilizando orientação a o
 
 4. **Execute o exemplo**
 
+   ```bash
    python scripts/fusao_marketplace.py
+   ```
 
 
 ---
